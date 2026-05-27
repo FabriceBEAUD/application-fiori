@@ -236,7 +236,7 @@ function Attestations() {
   const [modal, setModal] = useState(null)
   const [sent, setSent] = useState([])
   const [toast, showToast] = useToast()
-  const types = [{ icon:"📋", title:"Attestation employeur", desc:"Certifie votre contrat de travail actif", delay:"24h" }, { icon:"💰", title:"Attestation de salaire", desc:"Indique votre remuneration mensuelle brute/nette", delay:"48h" }, { icon:"🏠", title:"Attestation pour logement", desc:"Pour dossier locatif ou pret immobilier", delay:"48h" }, { icon:"🎓", title:"Certificat de travail", desc:"En cas de depart de entreprise", delay:"72h" }]
+  const types = [{ icon:'📋', title:'Attestation employeur', desc:'Certifie votre contrat de travail en cours', delay:'24h' }, { icon:'💰', title:'Attestation de salaire', desc:'Indique votre rémunération mensuelle brute/nette', delay:'48h' }, { icon:'🏠', title:"Attestation pour logement", desc:'Pour dossier locatif ou prêt immobilier', delay:'48h' }, { icon:'🎓', title:'Certificat de travail', desc:'Uniquement en cas de départ de l'entreprise', delay:'72h' }]
   const envoyer = () => { setSent(prev => [{ id: Date.now(), type: modal.title, date: new Date().toLocaleDateString('fr-FR'), statut: 'En cours' }, ...prev]); setModal(null); showToast('Demande envoyée — réponse sous ' + modal.delay) }
   return (
     <div style={{ padding: 24 }}>
