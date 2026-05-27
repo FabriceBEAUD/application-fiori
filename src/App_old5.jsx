@@ -533,10 +533,12 @@ Réponds toujours en français, de façon concise et professionnelle. Tu peux ai
     setInput('')
     setLoading(true)
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
           system: CONTEXT,
           messages: newMessages.map(m => ({ role: m.role, content: m.content }))
         })
@@ -556,15 +558,6 @@ Réponds toujours en français, de façon concise et professionnelle. Tu peux ai
 
   return (
     <>
-      {/* Badge Joule Ready */}
-      {!open && (
-        <div style={{ position:'fixed', bottom:90, right:16, background:'#fff', border:'1.5px solid #0854A0', borderRadius:20, padding:'5px 12px', display:'flex', alignItems:'center', gap:6, zIndex:1000, boxShadow:'0 2px 12px rgba(8,84,160,.15)', cursor:'pointer', animation:'pulse 2.5s ease-in-out infinite' }} onClick={()=>setOpen(true)}>
-          <div style={{ width:18, height:18, borderRadius:4, background:'#0854A0', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, color:'#fff', fontWeight:700, flexShrink:0 }}>S</div>
-          <span style={{ fontSize:11, fontWeight:600, color:'#0854A0', whiteSpace:'nowrap' }}>SAP Joule Ready</span>
-          <div style={{ width:6, height:6, borderRadius:'50%', background:'#22c55e', flexShrink:0 }}/>
-        </div>
-      )}
-
       {/* Bouton flottant */}
       <div onClick={() => setOpen(!open)} style={{ position:'fixed', bottom:24, right:24, width:56, height:56, borderRadius:'50%', background:'#0854A0', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', zIndex:1000, boxShadow:'0 4px 16px rgba(8,84,160,.35)', fontSize:24, transition:'transform .2s', transform:open?'rotate(45deg)':'rotate(0)' }}>
         {open ? '✕' : '💬'}
@@ -576,17 +569,12 @@ Réponds toujours en français, de façon concise et professionnelle. Tu peux ai
 
           {/* Header */}
           <div style={{ background:'#0854A0', padding:'14px 16px', display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
-            <div style={{ width:36, height:36, borderRadius:10, background:'rgba(255,255,255,.15)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, border:'1px solid rgba(255,255,255,.2)' }}>🤖</div>
-            <div style={{ flex:1 }}>
+            <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,.2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🤖</div>
+            <div>
               <div style={{ color:'#fff', fontSize:14, fontWeight:500 }}>Assistant RH</div>
-              <div style={{ display:'flex', alignItems:'center', gap:5, marginTop:2 }}>
-                <div style={{ background:'rgba(255,255,255,.15)', borderRadius:20, padding:'1px 8px', display:'flex', alignItems:'center', gap:4 }}>
-                  <div style={{ width:14, height:14, borderRadius:3, background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:9, color:'#0854A0', fontWeight:700, flexShrink:0 }}>S</div>
-                  <span style={{ color:'rgba(255,255,255,.9)', fontSize:10, fontWeight:500 }}>SAP Joule Ready</span>
-                </div>
-              </div>
+              <div style={{ color:'rgba(255,255,255,.7)', fontSize:11 }}>Disponible 24h/24</div>
             </div>
-            <div style={{ width:8, height:8, borderRadius:'50%', background:'#4ade80' }}/>
+            <div style={{ marginLeft:'auto', width:8, height:8, borderRadius:'50%', background:'#4ade80' }}/>
           </div>
 
           {/* Messages */}
@@ -617,12 +605,6 @@ Réponds toujours en français, de façon concise et professionnelle. Tu peux ai
               {suggestions.map(s => (
                 <div key={s} onClick={() => { setInput(s); }} style={{ background:'#E6F1FB', color:'#0854A0', borderRadius:20, padding:'6px 14px', fontSize:12, cursor:'pointer', fontWeight:500 }}>{s}</div>
               ))}
-              <div style={{ background:'#f0f7ff', border:'0.5px solid #b5d4f4', borderRadius:10, padding:'8px 12px', marginTop:4, display:'flex', gap:8, alignItems:'flex-start' }}>
-                <div style={{ width:18, height:18, borderRadius:4, background:'#0854A0', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, color:'#fff', fontWeight:700, flexShrink:0, marginTop:1 }}>S</div>
-                <div style={{ fontSize:11, color:'#185FA5', lineHeight:1.4 }}>
-                  <strong>SAP Joule</strong> sera intégré nativement lors du déploiement sur SAP BTP — connecté directement à vos données RH en temps réel.
-                </div>
-              </div>
             </div>
           )}
 
@@ -642,7 +624,7 @@ Réponds toujours en français, de façon concise et professionnelle. Tu peux ai
         </div>
       )}
 
-      <style>{`@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} } @keyframes pulse { 0%,100%{box-shadow:0 2px 12px rgba(8,84,160,.15)} 50%{box-shadow:0 2px 20px rgba(8,84,160,.35)} }`}</style>
+      <style>{`@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }`}</style>
     </>
   )
 }
