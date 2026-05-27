@@ -4,7 +4,7 @@ const SAP = '#0854A0'
 const SAP_D = '#1068C5'
 
 // ── DATA ─────────────────────────────────────────────────────
-const EMPLOYE = { nom: "Fabrice BEAUD'HUIN", initials: 'FB', matricule: '00045822', statut: 'CDI actif', email: 'f.beaudhuin@entreprise.fr', telephone: '+33 6 12 34 56 78', adresse: '12 rue du Moulin, 69003 Lyon', naissance: '14 mars 1988', poste: 'Responsable Supply Chain', departement: 'Opérations — Lyon Sud', manager: 'Julien LATOURES', contrat: 'CDI — temps plein', entree: '03 septembre 2018', soldeCP: 18, soldeRTT: 4.5 }
+const EMPLOYE = { nom: 'Marie Lefebvre', initials: 'ML', matricule: '00045821', statut: 'CDI actif', email: 'm.lefebvre@entreprise.fr', telephone: '+33 6 12 34 56 78', adresse: '12 rue du Moulin, 69003 Lyon', naissance: '14 mars 1988', poste: 'Responsable Supply Chain', departement: 'Opérations — Lyon Sud', manager: 'Pierre Dumont', contrat: 'CDI — temps plein', entree: '03 septembre 2018', soldeCP: 18, soldeRTT: 4.5 }
 const BULLETINS = [{ mois: 'Mai 2025', net: '3 248,50 €', taille: '142 Ko', nouveau: true }, { mois: 'Avril 2025', net: '3 248,50 €', taille: '138 Ko', nouveau: false }, { mois: 'Mars 2025', net: '3 412,00 €', taille: '145 Ko', nouveau: false }, { mois: 'Février 2025', net: '3 248,50 €', taille: '139 Ko', nouveau: false }, { mois: 'Janvier 2025', net: '3 248,50 €', taille: '141 Ko', nouveau: false }]
 const DEMANDES_INIT = [{ id: 1, dates: '14–18 juil. 2025', type: 'Congés payés', jours: 5, depot: '02/06', statut: 'En attente' }, { id: 2, dates: '24–25 avr. 2025', type: 'RTT', jours: 2, depot: '10/04', statut: 'Approuvée' }]
 const PERSONS_INIT = [{ id: 1, nom: 'Clara Lefebvre', lien: 'Conjointe', ddn: '12/04/1989', ss: '2 89 04 69 …', mutuelle: true, initials: 'CL', bg: '#FBEAF0', color: '#993556' }, { id: 2, nom: 'Thomas Lefebvre', lien: 'Enfant · 8 ans', ddn: '03/09/2016', ss: '—', mutuelle: true, initials: 'TL', bg: '#EAF3DE', color: '#27500A' }]
@@ -41,7 +41,7 @@ function Dashboard({ setScreen }) {
   return (
     <div style={{ padding: 24 }}>
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontSize: 22, fontWeight: 500, color: '#1a1a1a' }}>Bonjour, Fabrice 👋</div>
+        <div style={{ fontSize: 22, fontWeight: 500, color: '#1a1a1a' }}>Bonjour, Marie 👋</div>
         <div style={{ fontSize: 14, color: '#888', marginTop: 4 }}>Mercredi 28 mai 2025</div>
       </div>
       <SL first>Mes indicateurs</SL>
@@ -520,8 +520,8 @@ export default function App() {
     <div style={{ width:220,background:'#fff',borderRight:'0.5px solid #e5e5e5',display:'flex',flexDirection:'column',height:'100%',flexShrink:0 }}>
       <div style={{ padding:'20px 16px 16px',borderBottom:'0.5px solid #f0f0f0' }}>
         <div style={{ background:SAP,borderRadius:10,padding:'10px 14px',display:'flex',alignItems:'center',gap:10 }}>
-          <div style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,255,255,.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:500,color:'#fff' }}>FB</div>
-          <div><div style={{ color:'#fff',fontSize:13,fontWeight:500 }}>Fabrice BEAUD'HUIN</div><div style={{ color:'rgba(255,255,255,.7)',fontSize:11 }}>Matricule 00045821</div></div>
+          <div style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,255,255,.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:500,color:'#fff' }}>ML</div>
+          <div><div style={{ color:'#fff',fontSize:13,fontWeight:500 }}>Marie Lefebvre</div><div style={{ color:'rgba(255,255,255,.7)',fontSize:11 }}>Matricule 00045821</div></div>
         </div>
       </div>
       <nav style={{ flex:1,padding:'12px 8px',overflowY:'auto' }}>
@@ -601,8 +601,8 @@ export default function App() {
               {nonLus>0&&<span style={{ position:'absolute',top:-4,right:-4,background:SAP,color:'#fff',borderRadius:'50%',width:16,height:16,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:500 }}>{nonLus}</span>}
             </div>
             <div style={{ display:'flex',alignItems:'center',gap:8,cursor:'pointer' }}>
-              <div style={{ width:34,height:34,borderRadius:'50%',background:SAP,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:500,color:'#fff' }}>FB</div>
-              <div style={{ fontSize:13 }}><div style={{ fontWeight:500 }}>Fabrice BEAUD'HUIN</div><div style={{ color:'#888',fontSize:11 }}>Matricule 00045821</div></div>
+              <div style={{ width:34,height:34,borderRadius:'50%',background:SAP,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:500,color:'#fff' }}>ML</div>
+              <div style={{ fontSize:13 }}><div style={{ fontWeight:500 }}>Marie Lefebvre</div><div style={{ color:'#888',fontSize:11 }}>Matricule 00045821</div></div>
             </div>
           </div>
         </div>
