@@ -510,125 +510,6 @@ const NAV_ITEMS = [
 ]
 const TITLES = { dashboard:'Tableau de bord', fiche:'Ma fiche RH', conges:'Congés', paie:'Bulletins de paie', famille:'Famille', attestations:'Attestations', frais:'Notes de frais', messages:'Messagerie RH' }
 
-
-// ── CHATBOT RH ────────────────────────────────────────────────
-function ChatBot() {
-  const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Bonjour Fabrice ! Je suis votre assistant RH. Je peux vous aider sur vos congés, bulletins, attestations, notes de frais ou toute question RH. Comment puis-je vous aider ?" }
-  ])
-  const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
-  const endRef = useState(null)
-
-  const CONTEXT = `Tu es un assistant RH virtuel pour l'entreprise. Tu aides l'employé Fabrice BEAUD'HUIN (matricule 00045822, Responsable Supply Chain, département Opérations Lyon Sud, manager Julien LATOURES, CDI depuis le 03/09/2018).
-Données actuelles : 18 jours de congés payés restants, 4.5 jours de RTT restants, dernier salaire net 3248.50 EUR (mai 2025), 2 personnes à charge (conjoint + 1 enfant), mutuelle active.
-Réponds toujours en français, de façon concise et professionnelle. Tu peux aider sur : soldes de congés, bulletins de paie, attestations, notes de frais, mutuelle, contrat, procédures RH. Si tu ne sais pas, oriente vers le service RH (service.rh@entreprise.fr).`
-
-  const send = async () => {
-    if (!input.trim() || loading) return
-    const userMsg = { role: 'user', content: input }
-    const newMessages = [...messages, userMsg]
-    setMessages(newMessages)
-    setInput('')
-    setLoading(true)
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: CONTEXT,
-          messages: newMessages.map(m => ({ role: m.role, content: m.content }))
-        })
-      })
-      const data = await res.json()
-      const reply = data.content?.[0]?.text || "Désolé, je n'ai pas pu répondre. Contactez le service RH."
-      setMessages(prev => [...prev, { role: 'assistant', content: reply }])
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Une erreur est survenue. Veuillez réessayer ou contacter le service RH." }])
-    }
-    setLoading(false)
-  }
-
-  const onKey = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }
-
-  const suggestions = ["Combien de congés il me reste ?", "Comment demander une attestation ?", "Quand est mon prochain bulletin ?"]
-
-  return (
-    <>
-      {/* Bouton flottant */}
-      <div onClick={() => setOpen(!open)} style={{ position:'fixed', bottom:24, right:24, width:56, height:56, borderRadius:'50%', background:'#0854A0', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', zIndex:1000, boxShadow:'0 4px 16px rgba(8,84,160,.35)', fontSize:24, transition:'transform .2s', transform:open?'rotate(45deg)':'rotate(0)' }}>
-        {open ? '✕' : '💬'}
-      </div>
-
-      {/* Fenêtre chat */}
-      {open && (
-        <div style={{ position:'fixed', bottom:92, right:24, width:360, height:520, background:'#fff', borderRadius:20, border:'0.5px solid #e5e5e5', display:'flex', flexDirection:'column', zIndex:999, overflow:'hidden', boxShadow:'0 8px 32px rgba(0,0,0,.12)' }}>
-
-          {/* Header */}
-          <div style={{ background:'#0854A0', padding:'14px 16px', display:'flex', alignItems:'center', gap:10, flexShrink:0 }}>
-            <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,.2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18 }}>🤖</div>
-            <div>
-              <div style={{ color:'#fff', fontSize:14, fontWeight:500 }}>Assistant RH</div>
-              <div style={{ color:'rgba(255,255,255,.7)', fontSize:11 }}>Disponible 24h/24</div>
-            </div>
-            <div style={{ marginLeft:'auto', width:8, height:8, borderRadius:'50%', background:'#4ade80' }}/>
-          </div>
-
-          {/* Messages */}
-          <div style={{ flex:1, overflowY:'auto', padding:'12px 14px', display:'flex', flexDirection:'column', gap:10 }}>
-            {messages.map((m, i) => (
-              <div key={i} style={{ display:'flex', justifyContent:m.role==='user'?'flex-end':'flex-start' }}>
-                <div style={{ maxWidth:'80%', padding:'10px 14px', borderRadius:m.role==='user'?'16px 16px 4px 16px':'16px 16px 16px 4px', background:m.role==='user'?'#0854A0':'#f5f5f3', color:m.role==='user'?'#fff':'#1a1a1a', fontSize:13, lineHeight:1.5 }}>
-                  {m.content}
-                </div>
-              </div>
-            ))}
-            {loading && (
-              <div style={{ display:'flex', justifyContent:'flex-start' }}>
-                <div style={{ padding:'10px 14px', borderRadius:'16px 16px 16px 4px', background:'#f5f5f3', fontSize:13, color:'#888' }}>
-                  <span style={{ display:'inline-flex', gap:4 }}>
-                    <span style={{ animation:'bounce 1s infinite 0s', display:'inline-block' }}>•</span>
-                    <span style={{ animation:'bounce 1s infinite .2s', display:'inline-block' }}>•</span>
-                    <span style={{ animation:'bounce 1s infinite .4s', display:'inline-block' }}>•</span>
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Suggestions (si 1 seul message) */}
-          {messages.length === 1 && (
-            <div style={{ padding:'0 14px 10px', display:'flex', flexDirection:'column', gap:6, flexShrink:0 }}>
-              {suggestions.map(s => (
-                <div key={s} onClick={() => { setInput(s); }} style={{ background:'#E6F1FB', color:'#0854A0', borderRadius:20, padding:'6px 14px', fontSize:12, cursor:'pointer', fontWeight:500 }}>{s}</div>
-              ))}
-            </div>
-          )}
-
-          {/* Input */}
-          <div style={{ padding:'10px 14px', borderTop:'0.5px solid #f0f0f0', display:'flex', gap:8, flexShrink:0 }}>
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={onKey}
-              placeholder="Posez votre question RH…"
-              style={{ flex:1, padding:'10px 14px', border:'0.5px solid #e5e5e5', borderRadius:24, fontSize:13, outline:'none', fontFamily:'inherit', background:'#f9f9f9' }}
-            />
-            <button onClick={send} disabled={!input.trim() || loading} style={{ width:38, height:38, borderRadius:'50%', background:input.trim()?'#0854A0':'#e5e5e5', color:'#fff', border:'none', cursor:input.trim()?'pointer':'default', fontSize:16, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'background .15s' }}>
-              ➤
-            </button>
-          </div>
-        </div>
-      )}
-
-      <style>{`@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }`}</style>
-    </>
-  )
-}
-
 export default function App() {
   const [screen, setScreen] = useState('dashboard')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -692,7 +573,6 @@ export default function App() {
       </div>
       <div style={{ flex:1,overflowY:'auto' }}>{renderScreen()}</div>
       <MobileNav/>
-      <ChatBot/>
       {menuOpen&&(
         <div style={{ position:'fixed',inset:0,background:'rgba(0,0,0,.45)',zIndex:100 }} onClick={()=>setMenuOpen(false)}>
           <div style={{ position:'absolute',bottom:80,left:0,right:0,background:'#fff',borderRadius:'20px 20px 0 0',padding:'16px 8px 8px' }} onClick={e=>e.stopPropagation()}>
@@ -728,7 +608,6 @@ export default function App() {
         </div>
         <div style={{ flex:1,overflowY:'auto' }}>{renderScreen()}</div>
       </div>
-      <ChatBot/>
     </div>
   )
 }
